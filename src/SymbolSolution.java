@@ -4,7 +4,18 @@ public class SymbolSolution {
         return 0;
     }
     private int plusMinus(ObjectBuffer buffer) {
-        return 0;
+        int value = multiplicationDividing(buffer);
+        while (true) {
+            ObjectInfo info = buffer.next();
+            switch (info.type) {
+                case PLUS -> value += multiplicationDividing(buffer);
+                case MINUS -> value -= multiplicationDividing(buffer);
+                default -> {
+                    buffer.back();
+                    return value;
+                }
+            }
+        }
     }
 
     private int multiplicationDividing(ObjectBuffer buffer) {
