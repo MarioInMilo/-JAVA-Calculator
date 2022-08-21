@@ -2,12 +2,50 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Objects;
 
 public class CalculatorMenu {
+    private final StringBuilder stringBuilder = new StringBuilder();
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public void Calculator() {
+        boolean choice = false;
+        do {
+            System.out.println("Enter the expression: ");
+            if (choice) System.out.print(stringBuilder);
+            String userText = queryToInput();
+            checkInvalidSymbolAndEmptyExp(choice? stringBuilder + userText : userText);
+            int result = calcMethod(choice? stringBuilder + userText : userText);
+            stringBuilder.setLength(0);
+            stringBuilder.append(result);
+            System.out.println(stringBuilder);
+            System.out.println("""
+                    TYPE IN THE CONSOLE:
+                    "YES" if you wish to continue.
+                    "BYE" if you want to exit.
+                    "RES" if you want to erase everything
+                    """);
+            String tempReader = null;
+            try {
+                tempReader = reader.readLine().toUpperCase(Locale.ROOT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            switch (Objects.requireNonNull(tempReader)){
+                case "YES" -> choice = true;
+                case "BYE" -> {
+                    choice = false;
+                    stringBuilder.setLength(0);
+                }
+                case "RES" -> Calculator();
+                default -> {
+                    System.err.println("YOU ENTERED A NON-EXISTENT COMMAND");
+                    Calculator();
+                }
+            }
 
+        } while (choice);
     }
 
     private void checkInvalidSymbolAndEmptyExp(String text) {
