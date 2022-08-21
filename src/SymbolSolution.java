@@ -8,8 +8,18 @@ public class SymbolSolution {
     }
 
     private int multiplicationDividing(ObjectBuffer buffer) {
-
-        return 0;
+        int value = factor(buffer);
+        while (true) {
+            ObjectInfo info = buffer.next();
+            switch (info.type) {
+                case DIVISION -> value /= factor(buffer);
+                case MULTIPLICATION -> value *= factor(buffer);
+                default -> {
+                    buffer.back();
+                    return value;
+                }
+            }
+        }
     }
     private int factor(ObjectBuffer buffer) {
         ObjectInfo info = buffer.next();
