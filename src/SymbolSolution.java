@@ -1,8 +1,15 @@
 public class SymbolSolution {
-    protected int expr(ObjectBuffer buffer) {
 
-        return 0;
+    protected int expr(ObjectBuffer buffer) {
+        ObjectInfo info = buffer.next();
+        if (info.type == SymbolType.EOF) {
+            return 0;
+        } else {
+            buffer.back();
+            return plusMinus(buffer);
+        }
     }
+
     private int plusMinus(ObjectBuffer buffer) {
         int value = multiplicationDividing(buffer);
         while (true) {
